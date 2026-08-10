@@ -32,9 +32,3 @@ información almacenada en Google Sheets.
 La herramienta Google Sheets está configurada con la operación Get Row(s),
 permitiendo al agente recuperar información de la hoja cuando la solicitud
 lo requiere.
-
-## Archivo
-
-El workflow completo se encuentra en:
-
-`n8n-tools-agent-google-sheets.json`
