@@ -1,0 +1,138 @@
+{
+  "name": "Agent IA Coderhouse",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "Consulta en Google Sheets el estado de los pedidos y dime qué pedidos están pendientes.",
+        "options": {
+          "systemMessage": "ROL\n\nEres un agente de automatización empresarial especializado en ejecución de tareas,\ngestión de información y toma de decisiones mediante herramientas.\n\nOBJETIVO\n\nAnaliza la solicitud recibida, determina qué acciones son necesarias y utiliza las\nherramientas disponibles únicamente cuando sean necesarias para conseguir el objetivo.\n\nREGLAS DE RAZONAMIENTO\n\n1. Analiza primero la solicitud y determina el resultado esperado.\n2. Antes de utilizar una herramienta, determina si realmente es necesaria.\n3. Utiliza una herramienta únicamente cuando su descripción indique que corresponde\n   al caso de uso actual.\n4. No utilices herramientas por defecto.\n5. Si una herramienta devuelve información incompleta o ambigua, analiza el resultado\n   antes de continuar.\n6. No inventes datos, resultados, identificadores ni estados.\n7. Si no puedes completar una acción con las herramientas disponibles, indícalo\n   claramente.\n8. Evita llamadas repetitivas e innecesarias a las herramientas.\n9. Finaliza cuando el objetivo solicitado haya sido satisfecho.\n\nRESTRICCIONES\n\n- No ejecutes acciones que no estén relacionadas con la solicitud.\n- No inventes permisos, credenciales o capacidades.\n- No expongas credenciales, tokens ni información interna de configuración.\n- No repitas una llamada a una herramienta sin nueva información que la justifique.\n- Respeta estrictamente las herramientas disponibles.\n\nFORMATO DE RESPUESTA\n\nLa respuesta final debe ser clara, concisa y orientada al resultado.\nSi utilizaste una herramienta, indica brevemente qué acción realizaste y cuál fue\nsu resultado.\n\nLENGUAJE\n\nUtiliza español profesional y directo.\nNo utilices lenguaje inclusivo artificial ni formas como \"todxs\", \"todes\", \"@\",\n\"x\" o equivalentes.",
+          "maxIterations": 8
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        416,
+        0
+      ],
+      "id": "1fbf94f2-4c36-4761-8013-1cee92203009",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        336,
+        192
+      ],
+      "id": "10b91454-4507-41a9-9262-807b67683b34",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "JDZ6tWgrqfbYRbtJ",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        128,
+        0
+      ],
+      "id": "091281b3-b239-47fb-b27e-c50c04914e99",
+      "name": "Trigger"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Utiliza esta herramienta cuando necesites consultar información\nalmacenada en Google Sheets.\n\nDEBES utilizarla cuando:\n- El usuario solicite buscar información en la hoja.\n- Necesites consultar datos antes de responder.\n- La información necesaria no esté disponible en el contexto actual\n  y pueda encontrarse en la hoja.\n\nNO debes utilizarla cuando:\n- La respuesta pueda darse sin consultar Google Sheets.\n- El usuario solicite una explicación general.\n- La solicitud no tenga relación con los datos de la hoja.\n\nDespués de obtener los datos, analiza el resultado antes de responder.\nNo repitas la consulta si no existe nueva información que lo justifique.",
+        "documentId": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1sQOLL4PoTM5ciekx0oTpO4No4-nC6X3KtTgcPziuuhQ/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "https://docs.google.com/spreadsheets/d/1sQOLL4PoTM5ciekx0oTpO4No4-nC6X3KtTgcPziuuhQ/edit?gid=0#gid=0",
+          "mode": "url"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        672,
+        192
+      ],
+      "id": "f321f1c1-517b-48c9-b69c-5de3498d9c62",
+      "name": "Datos",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "bCcNVRzEZZN9Jlh3",
+          "name": "Google Sheets account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Datos": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "698acf86-8de1-48e9-91a7-52bb568ffc9d",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "14fbe2ef3e5cbf5e6937a8fc58de1284597d859fb9295d9f9dae446dacadd58e"
+  },
+  "id": "DCfftHY3OpwJhhPk",
+  "tags": []
+}
