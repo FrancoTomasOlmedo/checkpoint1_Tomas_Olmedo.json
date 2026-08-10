@@ -1,4 +1,4 @@
-# n8n Tools Agent
+# n8n Agent IA Coderhouse
 
 Workflow desarrollado en n8n como parte de una práctica de automatización
 con inteligencia artificial.
